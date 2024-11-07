@@ -13,53 +13,53 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
 
-  #   steps:
-  #     - name: Checkout repository
-  #       uses: actions/checkout@v3
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-  #     - name: Set up PHP
-  #       uses: shivammathur/setup-php@v2
-  #       with:
-  #         php-version: '8.1'
-  #         extensions: mbstring, xml, ctype, fileinfo, bcmath, json
-  #         coverage: none
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          extensions: mbstring, xml, ctype, fileinfo, bcmath, json
+          coverage: none
 
-  #     - name: Install Composer dependencies
-  #       run: composer install --prefer-dist --no-ansi --no-interaction --no-progress --no-scripts --optimize-autoloader
+      - name: Install Composer dependencies
+        run: composer install --prefer-dist --no-ansi --no-interaction --no-progress --no-scripts --optimize-autoloader
 
-  #     - name: Install Node.js
-  #       uses: actions/setup-node@v3
-  #       with:
-  #         node-version: '18'
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
 
-  #     - name: Install NPM dependencies
-  #       run: npm install
+      - name: Install NPM dependencies
+        run: npm install
 
-  #     - name: Set Laravel Vite bypass environment variable
-  #       run: echo "LARAVEL_BYPASS_ENV_CHECK=1" >> $GITHUB_ENV
+      - name: Set Laravel Vite bypass environment variable
+        run: echo "LARAVEL_BYPASS_ENV_CHECK=1" >> $GITHUB_ENV
 
-  #     - name: Build production assets
-  #       run: npm run build  # Build for production
+      - name: Build production assets
+        run: npm run build  # Build for production
 
-  #     - name: Generate optimized Laravel files
-  #       run: |
-  #         php artisan config:cache
-  #         php artisan route:cache
-  #         php artisan view:cache
+      - name: Generate optimized Laravel files
+        run: |
+          php artisan config:cache
+          php artisan route:cache
+          php artisan view:cache
 
-  #     - name: Upload built files for deployment
-  #       uses: actions/upload-artifact@v3
-  #       with:
-  #         name: laravel-app
-  #         path: |
-  #           vendor
-  #           node_modules
-  #           public/css
-  #           public/js
-  #           bootstrap/cache
-  #           storage/framework/cache
-  #           storage/framework/sessions
-  #           storage/framework/views
+      - name: Upload built files for deployment
+        uses: actions/upload-artifact@v3
+        with:
+          name: laravel-app
+          path: |
+            vendor
+            node_modules
+            public/css
+            public/js
+            bootstrap/cache
+            storage/framework/cache
+            storage/framework/sessions
+            storage/framework/views
 
   deploy:
     name: Deploy
@@ -68,11 +68,11 @@ jobs:
     if: github.ref == 'refs/heads/main'
 
     steps:
-      # - name: Download built files
-      #   uses: actions/download-artifact@v3
-      #   with:
-      #     name: laravel-app
-      #     path: ./
+      - name: Download built files
+        uses: actions/download-artifact@v3
+        with:
+          name: laravel-app
+          path: ./
           
       - name: Check GitHub Token Length
         run: |
