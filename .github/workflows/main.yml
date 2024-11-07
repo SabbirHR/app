@@ -1,10 +1,10 @@
-name: Build & Deploy
+name: Build & Deploy Laravel
 
 on:
   push:
     branches:
       - main
-      
+
 env:
   CI: false
 
@@ -12,34 +12,51 @@ jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
-  
+
     steps:
-      - name: Checkout repo
+      - name: Checkout repository
         uses: actions/checkout@v3
-  
-      - name: Setup Node
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'  # Adjust to match your PHP version
+          extensions: mbstring, xml, ctype, fileinfo, bcmath, json
+          coverage: none
+
+      - name: Install Composer dependencies
+        run: composer install --prefer-dist --no-ansi --no-interaction --no-progress --no-scripts --optimize-autoloader
+
+      - name: Install Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 18
-  
-      - name: Install dependencies
-        uses: bahmutov/npm-install@v1
-  
-      - name: Build project
-        run: npm run build
-      
-      - name: List all files after build
-        run: ls -al
+          node-version: '18'
 
-      - name: Verify build directory
-        run: ls -al ./build || echo "Build directory not found"
+      - name: Install NPM dependencies
+        run: npm install
 
-      - name: Upload production-ready build files
-        if: success() && steps.build.outcome == 'success'
+      - name: Build assets
+        run: npm run production  # Or `npm run dev` if using development mode
+
+      - name: Generate optimized Laravel files
+        run: |
+          php artisan config:cache
+          php artisan route:cache
+          php artisan view:cache
+
+      - name: Upload built files for deployment
         uses: actions/upload-artifact@v3
         with:
-          name: production-files
-          path: ./build
+          name: laravel-app
+          path: |
+            vendor
+            node_modules
+            public/css
+            public/js
+            bootstrap/cache
+            storage/framework/cache
+            storage/framework/sessions
+            storage/framework/views
 
   deploy:
     name: Deploy
@@ -48,14 +65,15 @@ jobs:
     if: github.ref == 'refs/heads/main'
 
     steps:
-      - name: Download artifact
+      - name: Download built files
         uses: actions/download-artifact@v3
         with:
-          name: production-files
-          path: ./build
+          name: laravel-app
+          path: ./
 
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.TOKEN }}
-          publish_dir: ./build 
+      - name: Deploy to Server
+        #env:
+          #SSH_KEY: ${{ secrets.Token }}  # Ensure you have your SSH key set up in GitHub Secrets
+        run: |
+          echo "hello"
+          # ssh -i $SSH_KEY user@yourserver 'cd /path/to/your/project && git pull && php artisan migrate --force'
