@@ -74,6 +74,14 @@ jobs:
           name: laravel-app
           path: ./
 
+      - name: Add SSH key
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.SSH_KEY }}
+
+      - name: Check SSH Key Length
+        run: |
+          echo "SSH_KEY length: ${#SSH_KEY} characters"
       - name: Deploy to Server
         run: |
           echo $SSH_KEY
