@@ -62,10 +62,10 @@ jobs:
   #           storage/framework/views
 
   deploy:
-    name: Deploy
-    needs: build
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
+    # name: Deploy
+    # needs: build
+    # runs-on: ubuntu-latest
+    # if: github.ref == 'refs/heads/main'
 
     steps:
       # - name: Download built files
