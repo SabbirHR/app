@@ -36,7 +36,7 @@ jobs:
         run: npm install
 
       - name: Build assets
-        run: npm run production  # Or `npm run dev` if using development mode
+        run: npm run dev  # Or `npm run dev` if using development mode
 
       - name: Generate optimized Laravel files
         run: |
