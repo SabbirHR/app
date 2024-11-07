@@ -73,15 +73,20 @@ jobs:
         with:
           name: laravel-app
           path: ./
-
-      - name: Add SSH key
-        uses: webfactory/ssh-agent@v0.5.3
-        with:
-          ssh-private-key: ${{ secrets.SSH_KEY }}
-
-      - name: Check SSH Key Length
+          
+      - name: Check GitHub Token Length
         run: |
-          echo "SSH_KEY length: ${#SSH_KEY} characters"
+          echo "TOKEN length: ${#Token} characters"
+        env:
+          GITHUB_TOKEN: ${{ secrets.Token }}
+      # - name: Add SSH key
+      #   uses: webfactory/ssh-agent@v0.5.3
+      #   with:
+      #     ssh-private-key: ${{ secrets.SSH_KEY }}
+
+      # - name: Check SSH Key Length
+      #   run: |
+      #     echo "SSH_KEY length: ${#SSH_KEY} characters"
       - name: Deploy to Server
         run: |
           echo $SSH_KEY
