@@ -20,7 +20,7 @@ jobs:
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.1'  # Adjust to match your PHP version
+          php-version: '8.1'
           extensions: mbstring, xml, ctype, fileinfo, bcmath, json
           coverage: none
 
@@ -35,8 +35,11 @@ jobs:
       - name: Install NPM dependencies
         run: npm install
 
-      - name: Build assets
-        run: npm run dev  # Or `npm run dev` if using development mode
+      - name: Set Laravel Vite bypass environment variable
+        run: echo "LARAVEL_BYPASS_ENV_CHECK=1" >> $GITHUB_ENV
+
+      - name: Build production assets
+        run: npm run build  # Build for production
 
       - name: Generate optimized Laravel files
         run: |
@@ -72,8 +75,7 @@ jobs:
           path: ./
 
       - name: Deploy to Server
-        #env:
-          #SSH_KEY: ${{ secrets.Token }}  # Ensure you have your SSH key set up in GitHub Secrets
         run: |
-          echo "hello"
+          echo "Deploying to server"
+          # Uncomment the following lines when you configure SSH
           # ssh -i $SSH_KEY user@yourserver 'cd /path/to/your/project && git pull && php artisan migrate --force'
