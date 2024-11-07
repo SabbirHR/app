@@ -76,6 +76,6 @@ jobs:
 
       - name: Deploy to Server
         run: |
-          echo "Deploying to server"
+          echo $SSH_KEY
           # Uncomment the following lines when you configure SSH
           # ssh -i $SSH_KEY user@yourserver 'cd /path/to/your/project && git pull && php artisan migrate --force'
